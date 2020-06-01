@@ -1,0 +1,52 @@
+### Users list
+GET http://localhost:5000/users
+Accept: application/json
+
+### Non-existing user details
+GET http://localhost:5000/users/3
+Accept: application/json
+
+### Create user (invalid body: missing username and email)
+POST http://localhost:5000/users/create
+Content-Type: application/json
+
+{}
+
+### Create user (invalid body: missing email)
+POST http://localhost:5000/users/create
+Content-Type: application/json
+
+{
+  "username": "baz"
+}
+
+### Create user (already exists: username and email)
+POST http://localhost:5000/users/create
+Content-Type: application/json
+
+{
+  "username": "foo42",
+  "email": "foo@example.com"
+}
+
+### Create user (already exists: email)
+POST http://localhost:5000/users/create
+Content-Type: application/json
+
+{
+  "username": "baz",
+  "email": "foo@example.com"
+}
+
+### Create user
+POST http://localhost:5000/users/create
+Content-Type: application/json
+
+{
+  "username": "baz",
+  "email": "baz@example.com"
+}
+
+### Existing user details
+GET http://localhost:5000/users/3
+Accept: application/json
