@@ -1,24 +1,24 @@
 import pydantic
 
 
-class SchemaUserCreateInput(pydantic.BaseModel):
+class UserCreateInput(pydantic.BaseModel):
     email: str
     username: str
 
 
-class SchemaUserCreateOutput(pydantic.BaseModel):
+class UserCreateOutput(pydantic.BaseModel):
     id: int
     email: str
     username: str
 
 
-class SchemaUserListOutput(pydantic.BaseModel):
+class UserListOutput(pydantic.BaseModel):
     id: int
     email: str
     username: str
 
 
-class SchemaUserDetailOutput(pydantic.BaseModel):
+class UserDetailOutput(pydantic.BaseModel):
     id: int
     email: str
     username: str

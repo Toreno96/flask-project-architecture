@@ -2,7 +2,12 @@ import dataclasses
 import http
 
 import flask
+import pydantic
 
+from core import models
+from core import schemas
+from core import selectors
+from core import services
 
 # Flask app definition
 
@@ -17,12 +22,12 @@ def handle_schema_validation_error(e):
     return {"errors": e.errors()}, http.HTTPStatus.BAD_REQUEST
 
 
-@app.errorhandler(ModelValidationError)
+@app.errorhandler(models.ValidationError)
 def handle_schema_validation_error(e):
     return flask.jsonify({"errors": e.args[1]}), http.HTTPStatus.BAD_REQUEST
 
 
-@app.errorhandler(ModelNotFound)
+@app.errorhandler(models.NotFound)
 def handle_schema_validation_error(e):
     return flask.jsonify({"errors": e.args[1]}), http.HTTPStatus.NOT_FOUND
 
@@ -38,17 +43,17 @@ def user_create_api():
     if not isinstance(body, dict):
         body = {}
 
-    deserialized = SchemaUserCreateInput(**body)
-    user = service_user_create(**deserialized.dict())
-    output = SchemaUserCreateOutput(**dataclasses.asdict(user)).dict()
+    deserialized = schemas.UserCreateInput(**body)
+    user = services.user_create(**deserialized.dict())
+    output = schemas.UserCreateOutput(**dataclasses.asdict(user)).dict()
 
     return flask.jsonify(output), http.HTTPStatus.CREATED
 
 
 @app.route(f"{USER_PATH}", methods=["GET"])
 def user_list_api():
-    users = selector_user_list()
-    output = [SchemaUserListOutput(**dataclasses.asdict(i)).dict() for i in users]
+    users = selectors.user_list()
+    output = [schemas.UserListOutput(**dataclasses.asdict(i)).dict() for i in users]
 
     return flask.jsonify(output), http.HTTPStatus.OK
 
@@ -56,7 +61,7 @@ def user_list_api():
 @app.route(f"{USER_PATH}/<user_id>", methods=["GET"])
 def user_detail_api(user_id):
     user_id = int(user_id)
-    user = selector_user_detail(user_id=user_id)
-    output = SchemaUserDetailOutput(**dataclasses.asdict(user)).dict()
+    user = selectors.user_detail(user_id=user_id)
+    output = schemas.UserDetailOutput(**dataclasses.asdict(user)).dict()
 
     return flask.jsonify(output), http.HTTPStatus.OK

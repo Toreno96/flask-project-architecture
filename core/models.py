@@ -2,11 +2,11 @@ import dataclasses
 import itertools
 
 
-class ModelValidationError(Exception):
+class ValidationError(Exception):
     pass
 
 
-class ModelNotFound(Exception):
+class NotFound(Exception):
     pass
 
 
@@ -14,7 +14,7 @@ _model_user_id = itertools.count(1)
 
 
 @dataclasses.dataclass
-class ModelUser:
+class User:
     email: str
     username: str
     id: int = dataclasses.field(default_factory=lambda: next(_model_user_id))
@@ -38,7 +38,7 @@ class ModelUser:
                 }
             )
         if errors:
-            raise ModelValidationError(self, errors)
+            raise ValidationError(self, errors)
 
     def save(self):
         self.full_clean()
@@ -46,6 +46,6 @@ class ModelUser:
 
 
 MODEL_USERS_IN_DB = [
-    ModelUser(email="foo@example.com", username="foo42"),
-    ModelUser(email="bar@example.com", username="hax0rBAAR"),
+    User(email="foo@example.com", username="foo42"),
+    User(email="bar@example.com", username="bar24"),
 ]
