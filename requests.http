@@ -50,3 +50,7 @@ Content-Type: application/json
 ### Existing user details
 GET http://localhost:5000/users/3
 Accept: application/json
+
+### User details (invalid parameter: not int)
+GET http://localhost:5000/users/foo
+Accept: application/json

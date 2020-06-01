@@ -60,8 +60,8 @@ def user_list_api():
 
 @app.route(f"{USER_PATH}/<user_id>", methods=["GET"])
 def user_detail_api(user_id):
-    user_id = int(user_id)
-    user = selectors.user_detail(user_id=user_id)
+    deserialized = schemas.UserDetailInput(user_id=user_id)
+    user = selectors.user_detail(**deserialized.dict())
     output = schemas.UserDetailOutput(**dataclasses.asdict(user)).dict()
 
     return flask.jsonify(output), http.HTTPStatus.OK

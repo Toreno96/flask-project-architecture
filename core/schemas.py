@@ -18,6 +18,10 @@ class UserListOutput(pydantic.BaseModel):
     username: str
 
 
+class UserDetailInput(pydantic.BaseModel):
+    user_id: int
+
+
 class UserDetailOutput(pydantic.BaseModel):
     id: int
     email: str
