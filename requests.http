@@ -2,15 +2,33 @@
 GET http://localhost:5000/users
 Accept: application/json
 
+> {%
+    client.test("", function() {
+        client.assert(response.status === 200, "");
+    });
+%}
+
 ### Non-existing user details
 GET http://localhost:5000/users/3
 Accept: application/json
+
+> {%
+    client.test("", function() {
+        client.assert(response.status === 404, "");
+    });
+%}
 
 ### Create user (invalid body: missing username and email)
 POST http://localhost:5000/users/create
 Content-Type: application/json
 
 {}
+
+> {%
+    client.test("", function() {
+        client.assert(response.status === 400, "");
+    });
+%}
 
 ### Create user (invalid body: missing email)
 POST http://localhost:5000/users/create
@@ -19,6 +37,12 @@ Content-Type: application/json
 {
   "username": "baz"
 }
+
+> {%
+    client.test("", function() {
+        client.assert(response.status === 400, "");
+    });
+%}
 
 ### Create user (already exists: username and email)
 POST http://localhost:5000/users/create
@@ -29,6 +53,12 @@ Content-Type: application/json
   "email": "foo@example.com"
 }
 
+> {%
+    client.test("", function() {
+        client.assert(response.status === 400, "");
+    });
+%}
+
 ### Create user (already exists: email)
 POST http://localhost:5000/users/create
 Content-Type: application/json
@@ -37,6 +67,12 @@ Content-Type: application/json
   "username": "baz",
   "email": "foo@example.com"
 }
+
+> {%
+    client.test("", function() {
+        client.assert(response.status === 400, "");
+    });
+%}
 
 ### Create user
 POST http://localhost:5000/users/create
@@ -47,10 +83,28 @@ Content-Type: application/json
   "email": "baz@example.com"
 }
 
+> {%
+    client.test("", function() {
+        client.assert(response.status === 201, "");
+    });
+%}
+
 ### Existing user details
 GET http://localhost:5000/users/3
 Accept: application/json
 
+> {%
+    client.test("", function() {
+        client.assert(response.status === 200, "");
+    });
+%}
+
 ### User details (invalid parameter: not int)
 GET http://localhost:5000/users/foo
 Accept: application/json
+
+> {%
+    client.test("", function() {
+        client.assert(response.status === 400, "");
+    });
+%}
